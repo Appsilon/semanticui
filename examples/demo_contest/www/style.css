@@ -1,0 +1,7 @@
+.ui.item.menu, .ui.item.menu .item {
+  background: #c6deff;
+}
+
+body {
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#133951)) fixed;
+}

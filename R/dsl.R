@@ -163,12 +163,8 @@ set_tab_id <- function(tab) {
 #'            active = "second_tab",
 #'            id = "exampletabset"
 #'     ),
-#'     h2("Active Tab:"),
-#'     textOutput("activetab")
 #'   ))
-#'   server <- shinyServer(function(input, output) {
-#'   })
-#'
+#'   server <- function(input, output) {}
 #'   shinyApp(ui, server)
 #' }
 #'

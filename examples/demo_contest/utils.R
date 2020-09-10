@@ -118,7 +118,7 @@ select_player_skills <- function(player){
 #' @param player2 data for a player, see \code{filter_player}
 #'
 #' @return barplot
-bar_plot_compare_two <- function(player1, player2) {
+barplot_compare_two <- function(player1, player2) {
   p1 <- select_player_skills(player1)
   p2 <- select_player_skills(player2)
 
@@ -142,6 +142,20 @@ bar_plot_compare_two <- function(player1, player2) {
                           paste(rep(" ", 70), collapse = " "),
                           player1$Name)
   )
+}
+
+#' Makes barplot with player skills
+#'
+#' @param player player list from fifa data
+#'
+#' @return barplot
+barplot_player_skills <- function(player) {
+  skill <- select_player_skills(player)
+  nd<-tibble::rownames_to_column(as.data.frame(t(skill)), "skill")
+  ggplot(data=nd, aes(x=skill, y=V1, fill=skill)) +
+    labs(y = "Value", x = NULL) +
+    geom_bar(stat="identity", show.legend = FALSE) + theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 }
 
 #' Get total values
@@ -181,7 +195,6 @@ get_n_players <- function(fifa_data, raw_value = F) {
   length(unique(fifa_data$Name))
 }
 
-
 #' Message Box UI
 #'
 #' @param head head value
@@ -201,3 +214,49 @@ custom_ui_message <- function(head, content, icon_name = "inbox",
     )
   )
 }
+
+#' Load the fifa 19 data
+#'
+#' @param path character with data path
+#'
+#' @return data.frame with fifa data
+load_fifa_data <- function(path = "fifa19_data.csv") {
+  fifa_data <- read.csv(path)
+  #fifa_data$Photo <- fix_photos_link(fifa_data$Photo)
+  #fifa_data$Club.Logo <- fix_club_link(fifa_data$Club.Logo)
+  fifa_data <- add_extra_columns_to_data(fifa_data)
+  fifa_data
+}
+
+#' Helper function to render list element
+#'
+#' @param header character with header element
+#' @param description character with content of the list
+#' @param icon_name character with optional icon
+#'
+#' @import shiny
+list_element_with_image <- function(header = NULL, description = NULL, img_src = NULL) {
+  div(class = "item",
+      img(class="ui avatar tiny image", src = img_src),
+      div(class = "content",
+          div(class = "header", header),
+          div(class = "description", h1(description)))
+  )
+}
+
+#' Animated list
+#'
+#' @param content_list list of lists with fields: `header` and/or `description`,
+#' `image`
+#' @return div with animated list
+custom_image_list <- function(content_list){
+  div(class="ui middle aligned animated selection list",
+      content_list %>% purrr::map(function(x) {
+        if (is.null(x$header) && is.null(x$description))
+          stop("content_list needs to have either header or description.")
+        list_element_with_image(x$header, x$description, x$img)
+      })
+  )
+}
+
+fifa_data <- load_fifa_data()
