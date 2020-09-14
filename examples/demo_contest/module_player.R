@@ -11,18 +11,24 @@ uiPlayer <- function(id, label = "Counter") {
         p("Here you can find a player and learn about his most important skills."),
         br(),
         h5("Scroll down to compare a player to another player!"),
+        tags$script(type="text/javascript", "
+                function jumpScroll() {
+                 	window.scroll(0,700); // horizontal and vertical scroll targets
+                }
+                "),
+        a(href="javascript:jumpScroll()", icon("arrow down"), icon("arrow down"), icon("arrow down")),
         br(),
         div(class="ui divider"),
         h4("Quick Q&A about the dataset"),
         accordion(list(
           list(title = "How many players this dataset contains?",
-               content = p(paste("There is data from", length(fifa_data$X), " of players from FIFA 2019."))),
+               content = p("There is data from", tags$b(length(fifa_data$X)), " of players from FIFA 2019.")),
           list(title = "How many leagues are included?",
-               content = p(paste("It contains records from", length(unique(fifa_data$League)), "football leagues in Europe"))),
+               content = p("It contains records from", tags$b(length(unique(fifa_data$League))), "football leagues in Europe")),
           list(title = "From how many countries and clubs?",
-               content = p(paste("This data represents players from", length(unique(fifa_data$Nationality)),
-                                 "countries and", length(unique(fifa_data$Club)), "clubs.")))
-        ))
+               content = p("This data represents players from", tags$b(length(unique(fifa_data$Nationality))),
+                           "countries and", tags$b(length(unique(fifa_data$Club))), "clubs."))
+        ), active_title = "How many players this dataset contains?")
       ),
       main_panel(
         div(class="ui center aligned header", "Player Analysis"),
@@ -44,7 +50,9 @@ uiPlayer <- function(id, label = "Counter") {
     sidebar_layout(
       sidebar_panel(
         h2("Select player for comparison"),
-        uiOutput(ns("search_comparison_player"))
+        uiOutput(ns("search_comparison_player")),
+        p(id = "bottom_player",
+          "Here you can select another player to compare their skills")
       ),
       main_panel(
         plotOutput(ns("players_comparison_barplot"))

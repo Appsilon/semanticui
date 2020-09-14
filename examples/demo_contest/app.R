@@ -69,12 +69,14 @@ server <- function(input, output, session) {
 
 ui <- semanticPage(
   title = "FIFA'19 App",
-  tags$link(rel="stylesheet", href="style.css", type="text/css" ),
+  tags$head(
+    tags$link(rel="stylesheet", href="style.css", type="text/css" )
+  ),
   horizontal_menu(
     list(
       list(name = "Info", link = route_link("index"), icon = "world"),
       list(name = "Player's details", link = route_link("player"), icon = "running"),
-      list(name = "By country", link = route_link("country"), icon = "futbol"),
+      list(name = "By country", link = route_link("country"), icon = "globe europe"),
       list(name = "By league", link = route_link("league"), icon = "futbol outline")
     ), logo = "http://www.anjelsyndicate.org/wp-content/uploads/2018/06/Fifa-19.png"
   ),
