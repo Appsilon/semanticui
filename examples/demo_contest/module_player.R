@@ -71,7 +71,7 @@ playerServer <- function(id) {
     )
 
     output$search_comparison_player <- renderUI(
-      search_selection_choices(ns("search_result_comparison"), choices)
+      search_selection_choices(ns("search_result_comparison"), choices, value = "Cristiano Ronaldo")
     )
 
     player1 <- reactive({
